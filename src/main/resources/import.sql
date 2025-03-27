@@ -1,9 +1,9 @@
-INSERT INTO categories(name) VALUES ('Telefones');
-INSERT INTO categories(name) VALUES ('Eletônicos');
-INSERT INTO categories(name) VALUES ('Computadores');
-INSERT INTO categories(name) VALUES ('Livros');
-INSERT INTO categories(name) VALUES ('Novidades');
-INSERT INTO categories(name) VALUES ('Em promoção');
+INSERT INTO categories(name,created_At) VALUES ('Telefones',Now());
+INSERT INTO categories(name,created_At) VALUES ('Eletônicos',Now());
+INSERT INTO categories(name,created_At) VALUES ('Computadores',Now());
+INSERT INTO categories(name,created_At) VALUES ('Livros',Now());
+INSERT INTO categories(name,created_At) VALUES ('Novidades',Now());
+INSERT INTO categories(name,created_At) VALUES ('Em promoção',Now());
 insert into products (name, description, price, img_url) values ('Lemon Garlic Marinade', 'A zesty marinade made with lemon juice and garlic, ideal for chicken or fish.', 91.47, 'http://dummyimage.com/230x100.png/cc0000/ffffff');
 insert into products (name, description, price, img_url) values ('Kids'' Science Experiment Kit', 'Engaging kit with science experiments for children.', 241.83, 'http://dummyimage.com/203x100.png/ff4444/ffffff');
 insert into products (name, description, price, img_url) values ('Kombucha Drink', 'Refreshing and tangy fermented tea, available in various flavors.', 204.09, 'http://dummyimage.com/232x100.png/cc0000/ffffff');

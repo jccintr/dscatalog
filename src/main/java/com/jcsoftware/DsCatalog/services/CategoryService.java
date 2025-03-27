@@ -1,11 +1,13 @@
 package com.jcsoftware.DsCatalog.services;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jcsoftware.DsCatalog.dtos.CategoryDTO;
@@ -22,13 +24,15 @@ public class CategoryService {
 	@Autowired
 	private CategoryRepository repository;
 	
-	public List<CategoryDTO> findAll() {
+	public Page<CategoryDTO> findAll(String name,Pageable pageable) {
 
-		List<Category> categories = repository.findAll();
+		//List<Category> categories = repository.findAll();
 		
-		return categories.stream().map(x -> new CategoryDTO(x)).toList();
+		//return categories.stream().map(x -> new CategoryDTO(x)).toList();
 
+       Page<Category> categories = repository.searchByName(name,pageable);
 		
+		return categories.map(x -> new CategoryDTO(x));
 	}
 	
 	
@@ -72,7 +76,7 @@ public class CategoryService {
 	}
 	
 	
-	
+	@Transactional(propagation=Propagation.SUPPORTS)
 	public void delete(Long id) {
 
 		try {
