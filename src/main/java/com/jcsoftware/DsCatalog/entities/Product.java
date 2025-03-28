@@ -35,6 +35,8 @@ public class Product implements Serializable {
 	private Double price;
 	private String imgUrl;
 	@Column(columnDefinition="TIMESTAMP WITHOUT TIME ZONE")
+	private Instant date;
+	@Column(columnDefinition="TIMESTAMP WITHOUT TIME ZONE")
 	private Instant createdAt;
 	@Column(columnDefinition="TIMESTAMP WITHOUT TIME ZONE")
 	private Instant updatedAt;
@@ -46,13 +48,14 @@ public class Product implements Serializable {
 		
 	}
 
-	public Product(Long id, String name, String description, Double price, String imgUrl) {
+	public Product(Long id, String name, String description, Double price, String imgUrl,Instant date) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.price = price;
 		this.imgUrl = imgUrl;
+		this.date = date;
 	}
 
 	public Long getId() {
@@ -95,7 +98,16 @@ public class Product implements Serializable {
 		this.imgUrl = imgUrl;
 	}
 	
-    @JsonIgnore
+		
+    public Instant getDate() {
+		return date;
+	}
+
+	public void setDate(Instant date) {
+		this.date = date;
+	}
+
+	@JsonIgnore
 	public Set<Category> getCategories() {
 		return categories;
 	}

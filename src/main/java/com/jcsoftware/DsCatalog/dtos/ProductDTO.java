@@ -1,11 +1,14 @@
 package com.jcsoftware.DsCatalog.dtos;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 import com.jcsoftware.DsCatalog.entities.Category;
 import com.jcsoftware.DsCatalog.entities.Product;
+
+import jakarta.persistence.Column;
 
 public class ProductDTO {
 
@@ -20,6 +23,8 @@ public class ProductDTO {
 //	@Positive(message = "O preço deve ser maior do que zero.")
 	private Double price;
 	private String imgUrl;
+	@Column(columnDefinition="TIMESTAMP WITHOUT TIME ZONE")
+	private Instant date;
 //	@NotEmpty(message = "Deve ser informada pelo menos uma categoria.")
 	private List<CategoryDTO> categories = new ArrayList<>();
 
@@ -29,13 +34,14 @@ public class ProductDTO {
 	
 	
 
-	public ProductDTO(Long id, String name, String description, Double price, String imgUrl) {
+	public ProductDTO(Long id, String name, String description, Double price, String imgUrl,Instant date) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.price = price;
 		this.imgUrl = imgUrl;
+		this.date = date;
 	}
 
 
@@ -46,6 +52,7 @@ public class ProductDTO {
 		this.description = entity.getDescription();
 		this.price = entity.getPrice();
 		this.imgUrl = entity.getImgUrl();
+		this.date = entity.getDate();
 		
 	}
 	
@@ -93,6 +100,19 @@ public class ProductDTO {
 	public void setImgUrl(String imgUrl) {
 		this.imgUrl = imgUrl;
 	}
+		
+
+	public Instant getDate() {
+		return date;
+	}
+
+
+
+	public void setDate(Instant date) {
+		this.date = date;
+	}
+
+
 
 	public List<CategoryDTO> getCategories() {
 		return categories;
