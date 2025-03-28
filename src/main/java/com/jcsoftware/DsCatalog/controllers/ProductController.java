@@ -16,51 +16,51 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.jcsoftware.DsCatalog.dtos.CategoryDTO;
-import com.jcsoftware.DsCatalog.entities.Category;
-import com.jcsoftware.DsCatalog.services.CategoryService;
+import com.jcsoftware.DsCatalog.dtos.ProductDTO;
+import com.jcsoftware.DsCatalog.entities.Product;
+import com.jcsoftware.DsCatalog.services.ProductService;
 
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping(value = "/categories")
-public class CategoryController {
+@RequestMapping(value = "/products")
+public class ProductController {
 	
 	@Autowired
-	private CategoryService service;
+	private ProductService service;
 
 	
 	@GetMapping
-	public ResponseEntity<Page<CategoryDTO>> findAll(Pageable pageable){
-		Page<CategoryDTO> categories = service.findAll(pageable);
-        return ResponseEntity.ok().body(categories);
+	public ResponseEntity<Page<ProductDTO>> findAll(Pageable pageable){
+		Page<ProductDTO> products = service.findAll(pageable);
+        return ResponseEntity.ok().body(products);
 	}
 	
 	
 	
 	@PostMapping
-	public ResponseEntity<CategoryDTO> insert(@RequestBody CategoryDTO dto){
+	public ResponseEntity<ProductDTO> insert(@RequestBody ProductDTO dto){
 		
-		CategoryDTO newCategoryDTO = service.insert(dto);
+		ProductDTO newProductDTO = service.insert(dto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-				.buildAndExpand(newCategoryDTO.getId()).toUri();
+				.buildAndExpand(newProductDTO.getId()).toUri();
 		
-		return ResponseEntity.created(uri).body(newCategoryDTO);
+		return ResponseEntity.created(uri).body(newProductDTO);
 	}
 	
 	@GetMapping(value="/{id}")
-	public ResponseEntity<CategoryDTO> findById(@PathVariable Long id){
-		CategoryDTO categoryDTO = service.findById(id);
-		return ResponseEntity.ok().body(categoryDTO);
+	public ResponseEntity<ProductDTO> findById(@PathVariable Long id){
+		ProductDTO productDTO = service.findById(id);
+		return ResponseEntity.ok().body(productDTO);
 	}
 	
 	//@PreAuthorize("hasRole('ROLE_ADMIN')")
 	
 	@PutMapping(value="/{id}")
-	public ResponseEntity<CategoryDTO> update(@PathVariable Long id,@Valid @RequestBody CategoryDTO dto){
+	public ResponseEntity<ProductDTO> update(@PathVariable Long id,@Valid @RequestBody ProductDTO dto){
 		
-		var  category = service.update(id, dto);
-		return ResponseEntity.ok().body(category);
+		var  product = service.update(id, dto);
+		return ResponseEntity.ok().body(product);
 		
 	}
 	
@@ -68,7 +68,7 @@ public class CategoryController {
 	//@PreAuthorize("hasRole('ROLE_ADMIN')")
 	
 	@DeleteMapping(value="/{id}")
-	public ResponseEntity<Category> delete(@PathVariable Long id){
+	public ResponseEntity<Product> delete(@PathVariable Long id){
 		
 		service.delete(id);
 		
