@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.jcsoftware.DsCatalog.dtos.CategoryDTO;
+import com.jcsoftware.DsCatalog.dtos.CategoryRecord;
 import com.jcsoftware.DsCatalog.entities.Category;
 import com.jcsoftware.DsCatalog.services.CategoryService;
 
@@ -29,10 +30,16 @@ public class CategoryController {
 	@Autowired
 	private CategoryService service;
 
-	
+	/*
 	@GetMapping
 	public ResponseEntity<Page<CategoryDTO>> findAll(Pageable pageable){
 		Page<CategoryDTO> categories = service.findAll(pageable);
+        return ResponseEntity.ok().body(categories);
+	}
+	*/
+	@GetMapping
+	public ResponseEntity<Page<CategoryRecord>> findAll(Pageable pageable){
+		Page<CategoryRecord> categories = service.findAll(pageable);
         return ResponseEntity.ok().body(categories);
 	}
 	

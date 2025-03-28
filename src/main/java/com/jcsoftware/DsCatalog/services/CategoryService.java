@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.jcsoftware.DsCatalog.dtos.CategoryDTO;
+import com.jcsoftware.DsCatalog.dtos.CategoryRecord;
 import com.jcsoftware.DsCatalog.entities.Category;
 import com.jcsoftware.DsCatalog.repositories.CategoryRepository;
 import com.jcsoftware.DsCatalog.services.exceptions.IntegrityViolationException;
@@ -24,13 +25,20 @@ public class CategoryService {
 	@Autowired
 	private CategoryRepository repository;
 	
+	/*
 	public Page<CategoryDTO> findAll(Pageable pageable) {
 
 	   Page<Category> categories = repository.findAll(pageable);
-			
 	   return categories.map(x -> new CategoryDTO(x));
 	   
 	}
+	*/
+	public Page<CategoryRecord> findAll(Pageable pageable) {
+
+		   Page<Category> categories = repository.findAll(pageable);
+		   return categories.map(x -> new CategoryRecord(x));
+		   
+		}
 	
 	
 	@Transactional
