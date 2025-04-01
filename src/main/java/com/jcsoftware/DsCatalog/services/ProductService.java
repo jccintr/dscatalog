@@ -26,7 +26,7 @@ public class ProductService {
 	@Autowired
 	private ProductRepository repository;
 	
-	public Page<ProductDTO> findAll(Pageable pageable) {
+	public Page<ProductDTO> findAllPaged(Pageable pageable) {
 
 	   Page<Product> products = repository.findAll(pageable);
 			

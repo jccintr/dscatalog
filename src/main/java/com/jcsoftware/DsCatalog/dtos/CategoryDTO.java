@@ -2,6 +2,14 @@ package com.jcsoftware.DsCatalog.dtos;
 
 import com.jcsoftware.DsCatalog.entities.Category;
 
+
+/*
+ @Getters
+ @Setters
+ @NoArgsConstructor
+ @AllArgsConstructor
+ @Builder
+ */
 public class CategoryDTO {
 	
 	private Long id;

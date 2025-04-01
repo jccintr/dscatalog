@@ -3,6 +3,7 @@ package com.jcsoftware.DsCatalog.dtos;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import com.jcsoftware.DsCatalog.entities.Category;
@@ -116,6 +117,27 @@ public class ProductDTO {
 
 	public List<CategoryDTO> getCategories() {
 		return categories;
+	}
+
+
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ProductDTO other = (ProductDTO) obj;
+		return Objects.equals(id, other.id);
 	}
 	
 	
