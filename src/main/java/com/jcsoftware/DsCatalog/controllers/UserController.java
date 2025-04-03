@@ -40,7 +40,7 @@ public class UserController {
 	
 	
 	@PostMapping
-	public ResponseEntity<UserDTO> insert(@RequestBody UserInsertDTO dto){
+	public ResponseEntity<UserDTO> insert(@Valid @RequestBody UserInsertDTO dto){
 		
 		UserDTO newUserDTO = service.insert(dto);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
@@ -58,7 +58,7 @@ public class UserController {
 	//@PreAuthorize("hasRole('ROLE_ADMIN')")
 	
 	@PutMapping(value="/{id}")
-	public ResponseEntity<UserDTO> update(@PathVariable Long id,@Valid @RequestBody UserDTO dto){
+	public ResponseEntity<UserDTO> update(@Valid @PathVariable Long id,@Valid @RequestBody UserDTO dto){
 		
 		var user = service.update(id, dto);
 		return ResponseEntity.ok().body(user);

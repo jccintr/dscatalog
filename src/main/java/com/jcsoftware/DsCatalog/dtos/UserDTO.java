@@ -5,11 +5,21 @@ import java.util.Set;
 
 import com.jcsoftware.DsCatalog.entities.User;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 public class UserDTO {
 	
 	private Long id;
+	@NotBlank(message = "Campo requerido")
+	@Size(min = 3, message = "O campo deve ter pelo menos 3 caracteres")
 	private String firstName;
+	@NotBlank(message = "Campo requerido")
+	@Size(min = 3, message = "O campo deve ter pelo menos 3 caracteres")
 	private String lastName;
+	@NotBlank(message = "Campo requerido")
+	@Email(message="Email inválido",regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
 	private String email;
 	private Set<RoleDTO> roles = new HashSet<>();
 	

@@ -10,23 +10,29 @@ import com.jcsoftware.DsCatalog.entities.Category;
 import com.jcsoftware.DsCatalog.entities.Product;
 
 import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 
 public class ProductDTO {
 
 	private Long id;
 
-//	@NotBlank(message = "Campo requerido")
-//	@Size(min = 3, max = 80, message = "O campo deve ter mais de 3 e menos de 80 caracteres")
+	@NotBlank(message = "Campo requerido")
+	@Size(min = 3, max = 80, message = "O campo deve ter mais de 3 e menos de 80 caracteres")
 	private String name;
 //	@Size(min = 10, message = "A descrição deve ter mais do que 10 caracteres.")
 	private String description;
-//	@NotNull(message="Campo requerido")
-//	@Positive(message = "O preço deve ser maior do que zero.")
+	@NotNull(message="Campo requerido")
+	@Positive(message = "O preço deve ser maior do que zero.")
 	private Double price;
+	@NotBlank(message = "Campo requerido")
 	private String imgUrl;
 	@Column(columnDefinition="TIMESTAMP WITHOUT TIME ZONE")
 	private Instant date;
-//	@NotEmpty(message = "Deve ser informada pelo menos uma categoria.")
+	@NotEmpty(message = "Deve ser informada pelo menos uma categoria.")
 	private List<CategoryDTO> categories = new ArrayList<>();
 
 	public ProductDTO() {
