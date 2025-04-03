@@ -237,4 +237,13 @@ insert into product_category (product_id, category_id) values (62, 6);
 insert into product_category (product_id, category_id) values (22, 6);
 insert into product_category (product_id, category_id) values (12, 6);
 
+INSERT INTO users (first_name, last_name, email, password) VALUES ('Alex', 'Brown', 'alex@gmail.com', '$2a$10$eACCYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORUYzfMQCbVBIhZ8tG');
+INSERT INTO users (first_name, last_name, email, password) VALUES ('Maria', 'Green', 'maria@gmail.com', '$2a$10$eACCYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORUYzfMQCbVBIhZ8tG');
+
+INSERT INTO roles (authority) VALUES ('ROLE_OPERATOR');
+INSERT INTO roles (authority) VALUES ('ROLE_ADMIN');
+
+INSERT INTO user_role (user_id, role_id) VALUES (1, 1);
+INSERT INTO user_role (user_id, role_id) VALUES (2, 1);
+INSERT INTO user_role (user_id, role_id) VALUES (2, 2);
 

@@ -72,6 +72,12 @@ public class Category implements Serializable {
 	public Instant getUpdateddAt() {
 		return updatedAt;
 	}
+	
+	
+
+	public Set<Product> getProducts() {
+		return products;
+	}
 
 	@PrePersist
 	public void prePersist() {
