@@ -18,6 +18,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.jcsoftware.DsCatalog.dtos.UserDTO;
 import com.jcsoftware.DsCatalog.dtos.UserInsertDTO;
+import com.jcsoftware.DsCatalog.dtos.UserUpdateDTO;
 import com.jcsoftware.DsCatalog.entities.User;
 import com.jcsoftware.DsCatalog.services.UserService;
 
@@ -58,7 +59,7 @@ public class UserController {
 	//@PreAuthorize("hasRole('ROLE_ADMIN')")
 	
 	@PutMapping(value="/{id}")
-	public ResponseEntity<UserDTO> update(@Valid @PathVariable Long id,@Valid @RequestBody UserDTO dto){
+	public ResponseEntity<UserDTO> update(@Valid @PathVariable Long id,@Valid @RequestBody UserUpdateDTO dto){
 		
 		var user = service.update(id, dto);
 		return ResponseEntity.ok().body(user);
