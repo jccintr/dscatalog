@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -23,10 +26,10 @@ import com.jcsoftware.DsCatalog.services.exceptions.ResourceNotFoundException;
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 	
-	@Autowired
-	private BCryptPasswordEncoder passwordEncoder;
+	//@Autowired
+	//private PasswordEncoder passwordEncoder;
 	
 	@Autowired
 	private UserRepository repository;
@@ -48,6 +51,7 @@ public class UserService {
 
 		User newUser = new User();
 		copyDtoToEntity(dto, newUser);
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 		newUser.setPassword(passwordEncoder.encode(dto.getPassword()));
 		newUser = repository.save(newUser);
 
@@ -112,5 +116,16 @@ public class UserService {
 		//dto.getRoles().forEach(roleDTO->entity.getRoles().add(new Role(roleDTO.getId(),roleDTO.getAuthority())));
 		dto.getRoles().forEach(roleDTO->entity.getRoles().add(roleRepository.getReferenceById(roleDTO.getId())));
 		
+	}
+
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		
+		User user = repository.findByEmail(username);
+		if (user == null) {
+			throw new UsernameNotFoundException("User not found");
+		}
+		return user;
 	}
 }
