@@ -6,9 +6,28 @@ public class SecurityConfig {
 	/*
 	 @Bean
 	    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-			http.csrf(csrf -> csrf.disable());
-			http.authorizeHttpRequests(auth -> auth.anyRequest().permitAll());
+		// adicionado por jc
+			http.exceptionHandling(exh -> exh.authenticationEntryPoint(
+					(request,response,exception)->{
+						response.sendError(HttpServletResponse.SC_UNAUTHORIZED,exception.getMessage());
+					}
+					));
 			return http.build();
 		}
-		*/
+	*/	
+	
+	/*
+	@Component
+    public class MyBeanPostProcessor implements BeanPostProcessor{
+
+        @Override
+        public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+            if (bean instanceof AuthorizationFilter authorizationFilter) {
+                authorizationFilter.setFilterErrorDispatch(false);
+            }
+            return bean;
+        }
+
+    }
+    */
 }

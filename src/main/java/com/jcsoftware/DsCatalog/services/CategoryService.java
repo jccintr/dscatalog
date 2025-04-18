@@ -1,5 +1,6 @@
 package com.jcsoftware.DsCatalog.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,15 +26,15 @@ public class CategoryService {
 	@Autowired
 	private CategoryRepository repository;
 	
-	/*
-	public Page<CategoryDTO> findAll(Pageable pageable) {
+	
+	public List<CategoryRecord> findAll() {
 
-	   Page<Category> categories = repository.findAll(pageable);
-	   return categories.map(x -> new CategoryDTO(x));
+	   List<Category> categories = repository.findAll();
+	   return categories.stream().map(x -> new CategoryRecord(x)).toList();
 	   
 	}
-	*/
-	public Page<CategoryRecord> findAll(Pageable pageable) {
+	
+	public Page<CategoryRecord> findAllPaged(Pageable pageable) {
 
 		   Page<Category> categories = repository.findAll(pageable);
 		   return categories.map(x -> new CategoryRecord(x));

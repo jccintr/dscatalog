@@ -1,4 +1,4 @@
-package com.jcsoftware.DsCatalog.exceptions;
+package com.jcsoftware.DsCatalog.controllers.exceptions;
 
 import java.io.Serializable;
 import java.time.Instant;
@@ -73,4 +73,3 @@ public class StandardError implements Serializable {
 	   
 	   
 }
-

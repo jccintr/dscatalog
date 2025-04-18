@@ -9,8 +9,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.jcsoftware.DsCatalog.controllers.exceptions.StandardError;
 import com.jcsoftware.DsCatalog.controllers.exceptions.ValidationError;
-import com.jcsoftware.DsCatalog.exceptions.StandardError;
 import com.jcsoftware.DsCatalog.services.exceptions.ForbiddenException;
 import com.jcsoftware.DsCatalog.services.exceptions.IntegrityViolationException;
 import com.jcsoftware.DsCatalog.services.exceptions.ResourceNotFoundException;

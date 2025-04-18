@@ -42,11 +42,26 @@ public class ResourceServerConfig {
 
 	@Bean
 	@Order(3)
-	public SecurityFilterChain rsSecurityFilterChain(HttpSecurity http) throws Exception {
+	 SecurityFilterChain rsSecurityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(csrf -> csrf.disable());
+		
 		http.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
 		http.oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer.jwt(Customizer.withDefaults()));
 		http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
+		
+	
+             //   .authenticationEntryPoint(new CustomAuthenticationEntryPoint()))
+		//http.anonymous().disable();
+		//http.anonymous(anonymous->anonymous.disable());
+		// adicionado por jc
+		/*
+					http.exceptionHandling(exh -> exh.authenticationEntryPoint(
+							(request,response,exception)->{
+								response.sendError(HttpServletResponse.SC_UNAUTHORIZED,exception.getMessage());
+							}
+							));
+		*/	
+		
 		return http.build();
 	}
 

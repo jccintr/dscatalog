@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.jcsoftware.DsCatalog.dtos.FieldMessage;
-import com.jcsoftware.DsCatalog.exceptions.StandardError;
 
 public class ValidationError extends StandardError {
 

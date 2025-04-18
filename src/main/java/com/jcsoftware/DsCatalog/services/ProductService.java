@@ -1,10 +1,13 @@
 package com.jcsoftware.DsCatalog.services;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -14,6 +17,7 @@ import com.jcsoftware.DsCatalog.dtos.CategoryDTO;
 import com.jcsoftware.DsCatalog.dtos.ProductDTO;
 import com.jcsoftware.DsCatalog.entities.Category;
 import com.jcsoftware.DsCatalog.entities.Product;
+import com.jcsoftware.DsCatalog.projections.ProductProjection;
 import com.jcsoftware.DsCatalog.repositories.ProductRepository;
 import com.jcsoftware.DsCatalog.services.exceptions.IntegrityViolationException;
 import com.jcsoftware.DsCatalog.services.exceptions.ResourceNotFoundException;
@@ -26,6 +30,7 @@ public class ProductService {
 	@Autowired
 	private ProductRepository repository;
 	
+	/*
 	public Page<ProductDTO> findAllPaged(Pageable pageable) {
 
 	   Page<Product> products = repository.findAll(pageable);
@@ -33,7 +38,28 @@ public class ProductService {
 	   return products.map(x -> new ProductDTO(x));
 	   
 	}
+	*/
 	
+	@Transactional(readOnly = true)
+	public Page<ProductDTO> findAllPaged(String name,String categoryId,Pageable pageable) {
+		
+		
+		List<Long> categoryIds = Arrays.asList();
+		
+		if(categoryId.length()>0)
+			categoryIds = Arrays.asList(categoryId.split(",")).stream().map(x-> Long.parseLong(x)).toList();
+		
+		Page<ProductProjection> page = repository.searchProducts(categoryIds,name, pageable);
+		
+		List<Long> productIds = page.map(x->x.getId()).toList();
+		
+		List<Product> products = repository.searchProductsWithCategories(productIds);
+		
+		List<ProductDTO> productsDto = products.stream().map(x-> new ProductDTO(x,x.getCategories())).toList();
+		
+		return  new PageImpl<>(productsDto,page.getPageable(),page.getTotalElements());
+		
+	}
 	
 	@Transactional
 	public ProductDTO insert(ProductDTO dto) {
@@ -109,4 +135,6 @@ public class ProductService {
 		}
 		
 	}
+
+	
 }
