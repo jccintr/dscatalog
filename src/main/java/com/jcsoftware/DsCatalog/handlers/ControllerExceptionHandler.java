@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.jcsoftware.DsCatalog.controllers.exceptions.StandardError;
 import com.jcsoftware.DsCatalog.controllers.exceptions.ValidationError;
+import com.jcsoftware.DsCatalog.services.exceptions.EmailException;
 import com.jcsoftware.DsCatalog.services.exceptions.ForbiddenException;
 import com.jcsoftware.DsCatalog.services.exceptions.IntegrityViolationException;
 import com.jcsoftware.DsCatalog.services.exceptions.ResourceNotFoundException;
@@ -19,6 +20,14 @@ import jakarta.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
 public class ControllerExceptionHandler {
+	
+	@ExceptionHandler(EmailException.class)
+    public ResponseEntity<StandardError> email(EmailException e, HttpServletRequest request) {
+		String error = "Falha ao enviar email";
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        StandardError err = new StandardError(Instant.now(), status.value(),error,e.getMessage(), request.getRequestURI());
+        return ResponseEntity.status(status).body(err);
+    }
 	
 	
 	@ExceptionHandler(ResourceNotFoundException.class)

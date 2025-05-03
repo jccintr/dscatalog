@@ -1,6 +1,7 @@
 package com.jcsoftware.DsCatalog.services;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,6 +10,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,17 +50,24 @@ public class ProductService {
 		
 		if(categoryId.length()>0)
 			categoryIds = Arrays.asList(categoryId.split(",")).stream().map(x-> Long.parseLong(x)).toList();
-		
+		/*
 		Page<ProductProjection> page = repository.searchProducts(categoryIds,name, pageable);
-		
 		List<Long> productIds = page.map(x->x.getId()).toList();
-		
 		List<Product> products = repository.searchProductsWithCategories(productIds);
-		
-		List<ProductDTO> productsDto = products.stream().map(x-> new ProductDTO(x,x.getCategories())).toList();
-		
+		List<ProductDTO> productsDto = products.stream().map(p-> new ProductDTO(p,p.getCategories())).toList();
 		return  new PageImpl<>(productsDto,page.getPageable(),page.getTotalElements());
+		*/
 		
+		Page<ProductProjection> page = repository.searchProducts(categoryIds, name, pageable);
+	    List<Long> productIds = page.map(ProductProjection::getId).toList();
+	    List<Product> products = repository.searchProductsWithCategories(productIds);
+	    List<ProductDTO> productsDto = products.stream().map(p -> new ProductDTO(p, p.getCategories())).toList();
+	    Comparator<ProductDTO> comparator = buildComparator(pageable.getSort());
+	    if (comparator != null) {
+	        productsDto = productsDto.stream().sorted(comparator).toList();
+	    }
+	    return new PageImpl<>(productsDto, pageable, page.getTotalElements());
+	    
 	}
 	
 	@Transactional
@@ -135,6 +144,63 @@ public class ProductService {
 		}
 		
 	}
+	
+	/*
+	private Comparator<ProductDTO> buildComparator(Sort sort) {
+	    Comparator<ProductDTO> comparator = null;
+
+	    for (Sort.Order order : sort) {
+	        Comparator<ProductDTO> current;
+
+	        // Suporte para campos que você quer permitir ordenação (ex: name)
+	        if (order.getProperty().equalsIgnoreCase("name")) {
+	            current = Comparator.comparing(ProductDTO::getName, String.CASE_INSENSITIVE_ORDER);
+	        } else if (order.getProperty().equalsIgnoreCase("id")) {
+	            current = Comparator.comparing(ProductDTO::getId);
+	        } else {
+	            continue; // Ignora ordenações por campos desconhecidos
+	        }
+
+	        if (order.getDirection() == Sort.Direction.DESC) {
+	            current = current.reversed();
+	        }
+
+	        comparator = comparator == null ? current : comparator.thenComparing(current);
+	    }
+
+	    return comparator;
+	}
+*/
+	private Comparator<ProductDTO> buildComparator(Sort sort) {
+	    Comparator<ProductDTO> comparator = null;
+
+	    for (Sort.Order order : sort) {
+	        Comparator<ProductDTO> current;
+
+	        switch (order.getProperty().toLowerCase()) {
+	            case "name":
+	                current = Comparator.comparing(ProductDTO::getName, String.CASE_INSENSITIVE_ORDER);
+	                break;
+	            case "id":
+	                current = Comparator.comparing(ProductDTO::getId);
+	                break;
+	            case "price":
+	                current = Comparator.comparing(ProductDTO::getPrice); // Supondo que seja BigDecimal ou Double
+	                break;
+	            default:
+	                continue; // Ignora campos não suportados
+	        }
+
+	        if (order.getDirection() == Sort.Direction.DESC) {
+	            current = current.reversed();
+	        }
+
+	        comparator = comparator == null ? current : comparator.thenComparing(current);
+	    }
+
+	    return comparator;
+	}
+
 
 	
 }

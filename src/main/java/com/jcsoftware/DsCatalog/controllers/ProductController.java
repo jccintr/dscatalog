@@ -19,7 +19,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.jcsoftware.DsCatalog.dtos.ProductDTO;
 import com.jcsoftware.DsCatalog.entities.Product;
-import com.jcsoftware.DsCatalog.projections.ProductProjection;
 import com.jcsoftware.DsCatalog.services.ProductService;
 
 import jakarta.validation.Valid;

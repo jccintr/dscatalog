@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.jcsoftware.DsCatalog.projections.IdProjection;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,7 +21,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "products")
-public class Product implements Serializable {
+public class Product implements Serializable, IdProjection<Long> {
 
 	/**
 	 * 
@@ -58,6 +59,7 @@ public class Product implements Serializable {
 		this.date = date;
 	}
 
+	@Override
 	public Long getId() {
 		return id;
 	}

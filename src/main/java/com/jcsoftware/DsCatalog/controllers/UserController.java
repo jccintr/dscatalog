@@ -40,7 +40,7 @@ public class UserController {
 	}
 	
 	
-	@PreAuthorize("hasRole('ROLE_ADMIN')")
+//	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping
 	public ResponseEntity<UserDTO> insert(@Valid @RequestBody UserInsertDTO dto){
 		
@@ -50,6 +50,7 @@ public class UserController {
 		
 		return ResponseEntity.created(uri).body(newUserDTO);
 	}
+	
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@GetMapping(value="/{id}")
 	public ResponseEntity<UserDTO> findById(@PathVariable Long id){

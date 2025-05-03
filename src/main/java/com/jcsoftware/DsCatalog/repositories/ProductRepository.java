@@ -6,7 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.jcsoftware.DsCatalog.entities.Product;
@@ -18,7 +17,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
 
 	@Query(nativeQuery = true, value = """
 			SELECT * FROM (
-			SELECT DISTINCT products.id, products.name
+			SELECT DISTINCT products.id, products.name,products.price
 			FROM products
 			INNER JOIN product_category ON product_category.product_id = products.id
 			WHERE (:categoryIds IS NULL OR product_category.category_id IN (:categoryIds))
@@ -29,7 +28,7 @@ public interface ProductRepository extends JpaRepository<Product,Long> {
 			""",
 			countQuery = """
 			SELECT COUNT(*) FROM (
-			SELECT DISTINCT products.id, products.name
+			SELECT DISTINCT products.id, products.name,products.price
 			FROM products
 			INNER JOIN product_category ON product_category.product_id = products.id
 			WHERE (:categoryIds IS NULL OR product_category.category_id IN (:categoryIds))

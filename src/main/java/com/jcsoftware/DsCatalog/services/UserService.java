@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.jcsoftware.DsCatalog.dtos.UserDTO;
 import com.jcsoftware.DsCatalog.dtos.UserInsertDTO;
 import com.jcsoftware.DsCatalog.dtos.UserUpdateDTO;
+import com.jcsoftware.DsCatalog.entities.Role;
 import com.jcsoftware.DsCatalog.entities.User;
 import com.jcsoftware.DsCatalog.repositories.RoleRepository;
 import com.jcsoftware.DsCatalog.repositories.UserRepository;
@@ -37,6 +38,9 @@ public class UserService implements UserDetailsService {
 	@Autowired
 	private RoleRepository roleRepository;
 	
+	@Autowired
+	private AuthService authService;
+	
 	public Page<UserDTO> findAllPaged(Pageable pageable) {
 
 	   Page<User> users = repository.findAll(pageable);
@@ -52,6 +56,9 @@ public class UserService implements UserDetailsService {
 		User newUser = new User();
 		copyDtoToEntity(dto, newUser);
 		//BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		newUser.getRoles().clear();
+		Role role = roleRepository.findByAuthority("ROLE_OPERATOR");
+		newUser.getRoles().add(role);
 		newUser.setPassword(passwordEncoder.encode(dto.getPassword()));
 		newUser = repository.save(newUser);
 
@@ -68,6 +75,15 @@ public class UserService implements UserDetailsService {
 		UserDTO dto = new UserDTO(user);
 		
 		return dto;
+
+	}
+	
+	@Transactional(readOnly = true)
+	public UserDTO findMe() {
+
+		User user = authService.authenticated();
+		return  new UserDTO(user);
+		
 
 	}
 	
