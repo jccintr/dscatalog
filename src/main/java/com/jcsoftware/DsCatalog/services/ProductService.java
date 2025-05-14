@@ -1,5 +1,6 @@
 package com.jcsoftware.DsCatalog.services;
 
+import java.net.URL;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -14,9 +15,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.jcsoftware.DsCatalog.dtos.CategoryDTO;
 import com.jcsoftware.DsCatalog.dtos.ProductDTO;
+import com.jcsoftware.DsCatalog.dtos.UriRecord;
 import com.jcsoftware.DsCatalog.entities.Category;
 import com.jcsoftware.DsCatalog.entities.Product;
 import com.jcsoftware.DsCatalog.projections.ProductProjection;
@@ -31,6 +34,9 @@ public class ProductService {
 	
 	@Autowired
 	private ProductRepository repository;
+	
+	@Autowired
+	private S3Service s3Service;
 	
 	/*
 	public Page<ProductDTO> findAllPaged(Pageable pageable) {
@@ -199,6 +205,11 @@ public class ProductService {
 	    }
 
 	    return comparator;
+	}
+
+	public UriRecord uploadFile(MultipartFile file) {
+		URL url = s3Service.uploadFile(file);
+		return new UriRecord(url.toString());
 	}
 
 

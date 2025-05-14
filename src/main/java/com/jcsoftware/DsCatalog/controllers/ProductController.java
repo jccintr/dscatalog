@@ -14,10 +14,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.jcsoftware.DsCatalog.dtos.ProductDTO;
+import com.jcsoftware.DsCatalog.dtos.UriRecord;
 import com.jcsoftware.DsCatalog.entities.Product;
 import com.jcsoftware.DsCatalog.services.ProductService;
 
@@ -80,6 +83,13 @@ public class ProductController {
 		service.delete(id);
 		
 		return ResponseEntity.noContent().build();
+	}
+	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_OPERATOR')")
+	@PostMapping(value = "/image")
+	public ResponseEntity<UriRecord> uploadImage(@RequestParam("file") MultipartFile file) {
+		UriRecord dto = service.uploadFile(file);
+		return ResponseEntity.ok().body(dto);
 	}
 
 
