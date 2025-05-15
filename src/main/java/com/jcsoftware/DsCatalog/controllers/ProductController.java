@@ -5,6 +5,7 @@ import java.net.URI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -15,11 +16,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.jcsoftware.DsCatalog.dtos.ProductDTO;
+import com.jcsoftware.DsCatalog.dtos.ProductInsertDTO;
 import com.jcsoftware.DsCatalog.dtos.UriRecord;
 import com.jcsoftware.DsCatalog.entities.Product;
 import com.jcsoftware.DsCatalog.services.ProductService;
@@ -53,11 +56,24 @@ public class ProductController {
 		return ResponseEntity.ok().body(productDTO);
 	}
 	
+	/*
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_OPERATOR')")	
 	@PostMapping
 	public ResponseEntity<ProductDTO> insert(@Valid @RequestBody ProductDTO dto){
 		
 		ProductDTO newProductDTO = service.insert(dto);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(newProductDTO.getId()).toUri();
+		
+		return ResponseEntity.created(uri).body(newProductDTO);
+	}
+	*/
+	
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN','ROLE_OPERATOR')")	
+	@PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<ProductDTO> insert2(@RequestPart("product") @Valid ProductInsertDTO dto,@RequestParam("file") MultipartFile file){
+		
+		ProductDTO newProductDTO = service.insert2(dto,file);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
 				.buildAndExpand(newProductDTO.getId()).toUri();
 		
@@ -87,7 +103,7 @@ public class ProductController {
 	
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_OPERATOR')")
 	@PostMapping(value = "/image")
-	public ResponseEntity<UriRecord> uploadImage(@RequestParam("file") MultipartFile file) {
+	public ResponseEntity<UriRecord> uploadImage(@RequestParam MultipartFile file) {
 		UriRecord dto = service.uploadFile(file);
 		return ResponseEntity.ok().body(dto);
 	}

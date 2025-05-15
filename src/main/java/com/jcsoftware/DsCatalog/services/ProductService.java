@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.jcsoftware.DsCatalog.dtos.CategoryDTO;
 import com.jcsoftware.DsCatalog.dtos.ProductDTO;
+import com.jcsoftware.DsCatalog.dtos.ProductInsertDTO;
 import com.jcsoftware.DsCatalog.dtos.UriRecord;
 import com.jcsoftware.DsCatalog.entities.Category;
 import com.jcsoftware.DsCatalog.entities.Product;
@@ -28,6 +29,7 @@ import com.jcsoftware.DsCatalog.services.exceptions.IntegrityViolationException;
 import com.jcsoftware.DsCatalog.services.exceptions.ResourceNotFoundException;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 
 @Service
 public class ProductService {
@@ -87,6 +89,16 @@ public class ProductService {
 		return new ProductDTO(newProduct);
 	}
 	
+	@Transactional
+	public ProductDTO insert2(ProductInsertDTO dto,MultipartFile file) {
+		URL url = s3Service.uploadFile(file);
+		Product newProduct = new Product();
+		copyDtoToEntity2(dto, newProduct);
+		newProduct.setImgUrl(url.toString());
+		newProduct = repository.save(newProduct);
+		return new ProductDTO(newProduct);
+	}
+	
 	
 	@Transactional(readOnly = true)
 	public ProductDTO findById(Long id) {
@@ -141,6 +153,21 @@ public class ProductService {
 		entity.setDescription(dto.getDescription());
 		entity.setPrice(dto.getPrice());
 		entity.setImgUrl(dto.getImgUrl());
+		entity.setDate(dto.getDate());
+		entity.getCategories().clear();
+		for(CategoryDTO catDTO: dto.getCategories()) {
+			Category cat = new Category();
+			cat.setId(catDTO.getId());
+			entity.getCategories().add(cat);
+		}
+		
+	}
+	
+	private void copyDtoToEntity2(ProductInsertDTO dto, Product entity) {
+
+		entity.setName(dto.getName());
+		entity.setDescription(dto.getDescription());
+		entity.setPrice(dto.getPrice());
 		entity.setDate(dto.getDate());
 		entity.getCategories().clear();
 		for(CategoryDTO catDTO: dto.getCategories()) {
@@ -211,6 +238,8 @@ public class ProductService {
 		URL url = s3Service.uploadFile(file);
 		return new UriRecord(url.toString());
 	}
+
+	
 
 
 	
